@@ -8,9 +8,9 @@
 		WHERE memID = #{memID}
 	</select>
 	
-	<insert id="boardInsert" parameterType="kr.board.mvc01.entity.Board">
- 		INSERT INTO myboard(title,content,writer)
- 		values(#{title}, #{content}, #{writer})
+	<insert id="memberRegister" parameterType="kr.board.mvc01.entity.Member">
+ 		INSERT INTO mem_tbl(memID,memPassword,memName,memAge,memGender,memEmail,memProfile)
+ 		values(#{memID},#{memPassword},#{memName},#{memAge},#{memGender},#{memEmail},#{memProfile})
 	</insert>
 	
 	<select id="boardContent" parameterType="int" resultType="kr.board.mvc01.entity.Board">

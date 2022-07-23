@@ -10,6 +10,7 @@
     <div class="panel-heading">회원가입</div>
     <div class="panel-body">
     	<form action='<c:url value="/memRegister.do"/>' method="post">
+    		<input type="hidden" id="memPassword" name="memPassword"/>
     		<table class="table table-bordered" style="text-align:center; border:1px solid #dddddd;">
     			<tr>
     				<td style="width:200px; vertical-align: middle;">아이디</td>
@@ -53,6 +54,7 @@
     			</tr>
     			<tr>
     				<td colspan="3" style="text-align:left;">
+    					<span id="passMsg" style="color:red;"></span>
     					<input type="submit" class="btn btn-primary btn-sm pull-right" value="등록"/>
     				</td>
     			</tr>
@@ -69,13 +71,34 @@
 	    <div class="modal-dialog">
 	    
 	      <!-- Modal content-->
-	      <div id="checkType" class="modal-content">
+	      <div id="checkType" class="modal-content panel-info">
 	        <div class="modal-header panel-heading">
 	          <button type="button" class="close" data-dismiss="modal">&times;</button>
 	          <h4 class="modal-title">메세지 확인</h4>
 	        </div>
 	        <div class="modal-body">
 	          <p id="result_msg"></p>
+	        </div>
+	        <div class="modal-footer">
+	          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+	  
+	  <!-- 실패메시지 -->
+	  <div class="modal fade" id="myMsg" role="dialog">
+	    <div class="modal-dialog">
+	    
+	      <!-- Modal content-->
+	      <div id="msgType" class="modal-content panel-info">
+	        <div class="modal-header panel-heading">
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+	          <h4 class="modal-title">${msgType}</h4>
+	        </div>
+	        <div class="modal-body">
+	          <p>${msg}</p>
 	        </div>
 	        <div class="modal-footer">
 	          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -91,6 +114,15 @@
 
 </body>
 <script type="text/javascript">
+	$(document).ready(function(){
+		var type = '${msgType}';
+		var msg = '${msg}';
+		if(${!empty msgType}) {
+			$("#msgType").attr("class", "modal-content panel-warning");
+			$("#myMsg").modal("show");
+		}
+	})
+
 	function registChk() {
 		var memID = $("#memID").val();
 		if(!memID) {
@@ -118,6 +150,17 @@
 				alert("error");
 			}
 		});	
+	}
+	
+	function passwordChk() {
+		var memPassword1 = $("#memPassword1").val();
+		var memPassword2 = $("#memPassword2").val();
+		if(memPassword1 != memPassword2) {
+			$("#passMsg").html("비밀번호가 서로 일치하지 않습니다.");
+		} else {
+			$("#passMsg").html("");
+			$("#memPassword").val(memPassword1);
+		}
 	}
 </script>
 </html>

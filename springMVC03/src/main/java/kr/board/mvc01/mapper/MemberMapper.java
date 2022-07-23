@@ -8,4 +8,5 @@ import kr.board.mvc01.entity.Member;
 public interface MemberMapper {
 
 	public Member memRegisterChk(String memID);
+	public int memberRegister(Member member);
 }
