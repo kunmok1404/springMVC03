@@ -13,5 +13,8 @@ public class Member {
 	private String memGender;
 	private String memEmail;
 	private String memProfile;
+	
+	private String memPassword1; // 비밀번호 확인용 
+	private String memPassword2; // 비밀번호 확인용
 
 }

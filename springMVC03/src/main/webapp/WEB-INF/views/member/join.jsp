@@ -10,7 +10,7 @@
     <div class="panel-heading">회원가입</div>
     <div class="panel-body">
     	<form action='<c:url value="/memRegister.do"/>' method="post">
-    		<input type="hidden" id="memPassword" name="memPassword"/>
+<!--     		<input type="hidden" id="memPassword" name="memPassword"/> -->
     		<table class="table table-bordered" style="text-align:center; border:1px solid #dddddd;">
     			<tr>
     				<td style="width:200px; vertical-align: middle;">아이디</td>
@@ -31,7 +31,7 @@
     			</tr>
     			<tr>
     				<td style="width:200px; vertical-align: middle;">나이</td>
-    				<td colspan="2"><input id="memAge" name="memAge" type="number" class="form-control" maxlength="2" placeholder="나이를 입력해주세요"/></td>
+    				<td colspan="2"><input id="memAge" name="memAge" type="number" class="form-control" min="1" maxlength="2" placeholder="나이를 입력해주세요"/></td>
     			</tr>
     			<tr>
     				<td style="width:200px; vertical-align: middle;">성별</td>
@@ -114,14 +114,14 @@
 
 </body>
 <script type="text/javascript">
-	$(document).ready(function(){
+	$(function(){
 		var type = '${msgType}';
 		var msg = '${msg}';
 		if(${!empty msgType}) {
 			$("#msgType").attr("class", "modal-content panel-warning");
 			$("#myMsg").modal("show");
-		}
-	})
+		};
+	});
 
 	function registChk() {
 		var memID = $("#memID").val();

@@ -36,11 +36,18 @@ public class MemberController {
 	// 회원가입처리
 	@PostMapping("/memRegister.do")
 	public String memRegister(Member member, RedirectAttributes rttr, HttpSession session) {
+		System.out.println(member);
 		if(memberValid(member)) {
 			rttr.addFlashAttribute("msgType", "fail");
 			rttr.addFlashAttribute("msg", "필수 입력값을 확인해주세요.");
 			return "redirect:/memJoin.do";
 		}
+		if(!member.getMemPassword1().equals(member.getMemPassword2())) {
+			rttr.addFlashAttribute("msgType", "fail");
+			rttr.addFlashAttribute("msg", "비밀번호가 서로 다릅니다.");
+			return "redirect:/memJoin.do";
+		}
+		member.setMemPassword(member.getMemPassword1());
 		member.setMemProfile("");
 		// 회원가입처리
 		int result = memberMapper.memberRegister(member);
@@ -57,9 +64,46 @@ public class MemberController {
 		
 	}
 	
+	// 로그아웃처리
+	@GetMapping("/memLogout.do")
+	public String memLogout(HttpSession httpSession) {
+		httpSession.invalidate();
+		return "redirect:/";
+	}
+	
+	// 로그인화면 이동
+	@GetMapping("/memLoginForm.do")
+	public String memLoginForm() {
+		return "member/login";
+	}
+	
+	// 로그인처리
+	@PostMapping("/memLogin.do")
+	public String memLogin(Member member, RedirectAttributes rttr, HttpSession session) {
+		if(member == null) {
+			return "redirect:/";
+		}
+		if(member.getMemID() == null || member.getMemID().equals("") ||
+		   member.getMemPassword() == null || "".equals(member.getMemPassword())){
+			rttr.addFlashAttribute("msgType", "fail");
+			rttr.addFlashAttribute("msg", "유저정보를 입력해주세요.");
+			return "redirect:/memLoginForm.do";
+		}
+		Member memDto = memberMapper.chkLogin(member);
+		if(memDto != null) {
+			session.setAttribute("mvo", memDto);
+			return "redirect:/";
+		} else {
+			rttr.addFlashAttribute("msgType", "fail");
+			rttr.addFlashAttribute("msg", "아이디 혹은 비밀번호가 일치하지 않습니다.");
+			return "redirect:/memLoginForm.do";
+		}
+	}
+	
 	private Boolean memberValid(Member member) {
 		if(member.getMemID()== null || member.getMemID().equals("") ||
-		   member.getMemPassword()== null || member.getMemPassword().equals("") ||	
+		   member.getMemPassword1()== null || member.getMemPassword1().equals("") ||
+		   member.getMemPassword2()== null || member.getMemPassword2().equals("") ||	
 		   member.getMemName()== null || member.getMemName().equals("") ||	
 		   member.getMemAge()== 0 ||
 		   member.getMemGender()== null || member.getMemGender().equals("") ||

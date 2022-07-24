@@ -13,10 +13,10 @@
  		values(#{memID},#{memPassword},#{memName},#{memAge},#{memGender},#{memEmail},#{memProfile})
 	</insert>
 	
-	<select id="boardContent" parameterType="int" resultType="kr.board.mvc01.entity.Board">
+	<select id="chkLogin" parameterType="kr.board.mvc01.entity.Member" resultType="kr.board.mvc01.entity.Member">
 		SELECT *
-		FROM myboard 
-		WHERE idx = #{idx}
+		FROM mem_tbl 
+		WHERE memID=#{memID} AND memPassword = #{memPassword}
 	</select>
 	
 	<delete id="boardDelete" parameterType="int">
