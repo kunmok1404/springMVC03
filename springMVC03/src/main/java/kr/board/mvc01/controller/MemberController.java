@@ -36,8 +36,7 @@ public class MemberController {
 	// 회원가입처리
 	@PostMapping("/memRegister.do")
 	public String memRegister(Member member, RedirectAttributes rttr, HttpSession session) {
-		System.out.println(member);
-		if(memberValid(member)) {
+		if(!memberValid(member)) {
 			rttr.addFlashAttribute("msgType", "fail");
 			rttr.addFlashAttribute("msg", "필수 입력값을 확인해주세요.");
 			return "redirect:/memJoin.do";
@@ -100,6 +99,41 @@ public class MemberController {
 		}
 	}
 	
+	// 회원정보수정 화면 이동
+	@GetMapping("/updateUserInfo.do")
+	public String updateUserInfo() {
+		return "member/updateUserForm";
+	}
+	
+	// 회원정보수정 처리
+	@PostMapping("/updateUserInfo.do")
+	public String updateUser(Member member, RedirectAttributes rttr, HttpSession session) {
+		if(!memberValid(member)) {
+			rttr.addFlashAttribute("msgType", "fail");
+			rttr.addFlashAttribute("msg", "필수 입력값을 확인해주세요.");
+			return "redirect:/updateUserForm.do";
+		}
+		if(!member.getMemPassword1().equals(member.getMemPassword2())) {
+			rttr.addFlashAttribute("msgType", "fail");
+			rttr.addFlashAttribute("msg", "비밀번호가 서로 다릅니다.");
+			return "redirect:/updateUserForm.do";
+		}
+		member.setMemPassword(member.getMemPassword1());
+		// 회원정보 수정
+		int result = memberMapper.memUpdate(member);
+		if(result == 1) {
+			rttr.addFlashAttribute("msgType", "success");
+			rttr.addFlashAttribute("msg", "회원정보가 수정되었습니다.");
+			session.setAttribute("mvo", member);
+			return "redirect:/";
+		} else {
+			rttr.addFlashAttribute("msgType", "fail");
+			rttr.addFlashAttribute("msg", "회원정보수정에 실패했습니다.");
+			return "redirect:/updateUserForm.do";
+		}
+	
+	}
+	
 	private Boolean memberValid(Member member) {
 		if(member.getMemID()== null || member.getMemID().equals("") ||
 		   member.getMemPassword1()== null || member.getMemPassword1().equals("") ||
@@ -108,8 +142,8 @@ public class MemberController {
 		   member.getMemAge()== 0 ||
 		   member.getMemGender()== null || member.getMemGender().equals("") ||
 		   member.getMemEmail()== null || member.getMemEmail().equals("")) {
-		   return true;
+		   return false;
 		}
-		return false;
+		return true;
 	}
 }

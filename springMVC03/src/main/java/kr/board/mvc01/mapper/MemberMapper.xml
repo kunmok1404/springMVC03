@@ -19,15 +19,14 @@
 		WHERE memID=#{memID} AND memPassword = #{memPassword}
 	</select>
 	
-	<delete id="boardDelete" parameterType="int">
-		DELETE FROM myboard WHERE idx = #{idx}
-	</delete>
-	
-	<update id="boardUpdate" parameterType="kr.board.mvc01.entity.Board">
-		UPDATE myboard SET
-			TITLE = #{title},
-			CONTENT = #{content}
-		WHERE idx = #{idx}
+	<update id="memUpdate" parameterType="kr.board.mvc01.entity.Member">
+		UPDATE mem_tbl SET
+			memPassword = #{memPassword},
+			memName = #{memName},
+			memAge = #{memAge},
+			memGender = #{memGender},
+			memEmail = #{memEmail}
+		WHERE memID = #{memID}
 	</update>
 
 </mapper>

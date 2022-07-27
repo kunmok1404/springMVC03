@@ -10,4 +10,5 @@ public interface MemberMapper {
 	public Member memRegisterChk(String memID);
 	public int memberRegister(Member member);
 	public Member chkLogin(Member member);
+	public int memUpdate(Member member);
 }
