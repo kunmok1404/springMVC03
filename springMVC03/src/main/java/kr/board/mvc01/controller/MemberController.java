@@ -147,7 +147,7 @@ public class MemberController {
 	
 	// 사진등록처리
 	@PostMapping("/addUserImg.do")
-	public String addUserImg(HttpServletRequest request, RedirectAttributes rttr) {
+	public String addUserImg(HttpServletRequest request, HttpSession session, RedirectAttributes rttr) {
 		// 1.파일업로드 API(cos.jar)
 		MultipartRequest multi = null;
 		int fileSize = 10*1024*1024; // 10MB
@@ -162,7 +162,7 @@ public class MemberController {
 			return "redirect:/userImgForm.do";
 		}
 		// DB저장
-		String memID = request.getParameter("memID");
+		String memID = multi.getParameter("memID");
 		String fileName = "";
 		File file = multi.getFile("memProfile");
 		if(file != null) { // .PNG .JPG .GIF
@@ -176,6 +176,7 @@ public class MemberController {
 				if(originFile.exists()) {
 					originFile.delete();
 				}
+				fileName = file.getName();
 			} else {
 				// 이미지 파일이 아니라면 삭제
 				if(file.exists()) {
@@ -187,8 +188,15 @@ public class MemberController {
 			}
 		}
 		// DB => 새로운 이미지 업데이트
-		
-		return "";
+		Member member = new Member();
+		member.setMemID(memID);
+		member.setMemProfile(fileName);
+		memberMapper.updateProfile(member);
+		Member newMember = memberMapper.getMemberInfo(memID);
+		session.setAttribute("mvo", newMember); // 세션새롭게 생성
+		rttr.addFlashAttribute("msgType", "success");
+		rttr.addFlashAttribute("msg", "이미지가 등록되었습니다.");
+		return "redirect:/";
 	}
 	
 	private Boolean memberValid(Member member) {

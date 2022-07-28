@@ -11,4 +11,5 @@ public interface MemberMapper {
 	public int memberRegister(Member member);
 	public Member chkLogin(Member member);
 	public int memUpdate(Member member);
+	public void updateProfile(Member member);
 }
