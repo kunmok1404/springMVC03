@@ -9,10 +9,18 @@
 				<h4>Spring MVC03</h4>
 			</c:when> 
 			<c:otherwise>
-				<h4>[사진]${mvo.memName}님 안녕하세요.</h4>
+				<c:choose>
+					<c:when test="${empty mvo.memProfile}">
+						<img src='<c:url value="/resources/img/user.png"/>' style="width:50px;height:50px;"/>
+					</c:when>
+					<c:otherwise>
+						<img src='<c:url value="/resources/upload/${mvo.emeProfile}"/>' style="width:50px;height:50px;"/>
+					</c:otherwise>
+				</c:choose>
+				<span style="margin-left:10px;font-size:20px;font-weight:bolder;">${mvo.memName}님 안녕하세요.</span>
 			</c:otherwise>
 		</c:choose>
-	  <div class="panel panel-default">
+	  <div class="panel panel-default" style="margin-top:15px;">
 	    <div style="text-align:center;">
 	    	<img src="http://placeimg.com/640/480/any" style="width:100%;height:425px;"/>
 	    </div>

@@ -1,7 +1,9 @@
 package kr.board.mvc01.controller;
 
+import java.io.File;
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import kr.board.mvc01.entity.Member;
 import kr.board.mvc01.mapper.MemberMapper;
@@ -29,7 +34,7 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("/memRegisterChk")
 	public int memRegisterChk(@RequestBody Member member) {
-		Member m = memberMapper.memRegisterChk(member.getMemID());
+		Member m = memberMapper.getMemberInfo(member.getMemID());
 		return Objects.isNull(m) ? 1 : 0;
 	}
 	
@@ -132,6 +137,58 @@ public class MemberController {
 			return "redirect:/updateUserForm.do";
 		}
 	
+	}
+	
+	// 사진등록화면 이동
+	@GetMapping("/userImgForm.do")
+	public String userImgForm() {
+		return "member/userImgForm";
+	}
+	
+	// 사진등록처리
+	@PostMapping("/addUserImg.do")
+	public String addUserImg(HttpServletRequest request, RedirectAttributes rttr) {
+		// 1.파일업로드 API(cos.jar)
+		MultipartRequest multi = null;
+		int fileSize = 10*1024*1024; // 10MB
+		String savePath = request.getRealPath("resources/upload"); // 실제경로 얻기
+		try {
+			// 이미지 업로드
+			multi = new MultipartRequest(request, savePath, fileSize, "UTF-8", new DefaultFileRenamePolicy());
+		} catch (Exception e) {
+			e.printStackTrace();
+			rttr.addFlashAttribute("msgType", "fail");
+			rttr.addFlashAttribute("msg", "파일의 크기는 10MB를 넘을 수 없습니다.");
+			return "redirect:/userImgForm.do";
+		}
+		// DB저장
+		String memID = request.getParameter("memID");
+		String fileName = "";
+		File file = multi.getFile("memProfile");
+		if(file != null) { // .PNG .JPG .GIF
+			String ext = file.getName().substring(file.getName().lastIndexOf(".")+1).toUpperCase();
+			if("PNG".equals(ext) || "JPG".equals(ext) || "GIF".equals(ext)) {
+				// 기존실제파일 삭제
+				Member mdto = memberMapper.getMemberInfo(memID);
+				String originProfile = mdto.getMemProfile();
+				File originFile = new File(savePath + File.separator + originProfile);
+				
+				if(originFile.exists()) {
+					originFile.delete();
+				}
+			} else {
+				// 이미지 파일이 아니라면 삭제
+				if(file.exists()) {
+					file.delete();
+				}
+				rttr.addFlashAttribute("msgType", "fail");
+				rttr.addFlashAttribute("msg", "이미지 파일만 업로드 할 수 있습니다.");
+				return "redirect:/userImgForm.do";
+			}
+		}
+		// DB => 새로운 이미지 업데이트
+		
+		return "";
 	}
 	
 	private Boolean memberValid(Member member) {

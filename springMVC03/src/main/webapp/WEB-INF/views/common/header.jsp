@@ -32,25 +32,15 @@
       <c:choose>
       	<c:when test="${empty mvo}">
    		  <ul class="nav navbar-nav navbar-right">
-	        <li class="dropdown">
-	          <a class="dropdown-toggle" data-toggle="dropdown" href="#">접속하기<span class="caret"></span></a>
-	          <ul class="dropdown-menu">
-	            <li><a href='<c:url value="/memLoginForm.do"/>'>로그인</a></li>
-	            <li><a href='<c:url value="/memJoin.do"/>'>회원가입</a></li>
-	          </ul>
-	        </li>
+            <li><a href='<c:url value="/memLoginForm.do"/>'><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;로그인</a></li>
+            <li><a href='<c:url value="/memJoin.do"/>'><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;회원가입</a></li>
 	      </ul>
       	</c:when>
       	<c:otherwise>
       	  <ul class="nav navbar-nav navbar-right">
-	        <li class="dropdown">
-	          <a class="dropdown-toggle" data-toggle="dropdown" href="#">회원관리<span class="caret"></span></a>
-	          <ul class="dropdown-menu">
-	            <li><a href='<c:url value="/updateUserInfo.do"/>'>회원정보수정</a></li>
-	            <li><a href="#">프로필사진등록</a></li>
-	            <li><a href='<c:url value="/memLogout.do"/>'>로그아웃</a></li>
-	          </ul>
-	        </li>
+            <li><a href='<c:url value="/updateUserInfo.do"/>'><span class="glyphicon glyphicon-wrench"></span>&nbsp;&nbsp;회원정보수정</a></li>
+            <li><a href='<c:url value="/userImgForm.do"/>'><span class="glyphicon glyphicon-picture"></span>&nbsp;&nbsp;사진등록</a></li>
+            <li><a href='<c:url value="/memLogout.do"/>'><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;로그아웃</a></li>
 	      </ul>
       	</c:otherwise>
       </c:choose>

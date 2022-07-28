@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.board.mvc01.mapper.MemberMapper">
 
-	<select id="memRegisterChk" parameterType="string" resultType="kr.board.mvc01.entity.Member">
+	<select id="getMemberInfo" parameterType="string" resultType="kr.board.mvc01.entity.Member">
 		SELECT *
 		FROM mem_tbl 
 		WHERE memID = #{memID}
 	</select>
 	
-	<insert id="memberRegister" parameterType="kr.board.mvc01.entity.Member">
+	<insert id="getMemberInfo" parameterType="kr.board.mvc01.entity.Member">
  		INSERT INTO mem_tbl(memID,memPassword,memName,memAge,memGender,memEmail,memProfile)
  		values(#{memID},#{memPassword},#{memName},#{memAge},#{memGender},#{memEmail},#{memProfile})
 	</insert>
